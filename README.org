@@ -1,0 +1,25 @@
+#+title: Magix Linux stage4s build guide
+
+
+This repo will contain the necessary files, steps, and dependencies required to make a stage4 that is compatible with Magix Linux. In theory any Gentoo stage3 or stage4 will work, with minimal to no changes, but this will also be a good starting point if you want to make your own (or if I forget how to make them, I can always come back)
+
+* Requirements
+A Linux-based distribution, PREFERABLY one with the *arch-chroot* in its repos, not a problem if there is none. Also do note that you *CAN ONLY* make stage4s for your computer architecture, or at least from my limited knowledge.
+
+
+A stage3, that you can download from here : [[https://www.gentoo.org/downloads/][Downloads – Gentoo Linux]]
+
+
+And the most important thing is to have fun ^-^
+
+
+* OpenRC vs SystemD
+
+Here in Magix corp, we rarely judge you for your choice of software, and your init is no exception. Instructions for both openrc and systemd will be provided, and the differences will be highlighed. Keep in mind that everything can be tailored to your liking. So go wild!
+
+
+* NoX11
+
+NoX11 (or NoX) will refer to a stage4 without a DE or WM, just a tty and basic tools. This will logically be the smallest one, and fastest to make, as it will be similar to the base stage3. We will be using the non-desktop stage3 as a base because why not.
+
+- *Step 1:* Extract stage3 to Build directory using ~tar xpvf path/to/stage3.tar.xz --xattrs-include='*.*' --numeric-owner Builddir~
