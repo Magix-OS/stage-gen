@@ -37,19 +37,36 @@ mount --make-slave run
 chroot . /bin/bash
 #+END_SRC
 - *Step 4:* ~source /etc/profile~
-- *Step 5:* We now execute ~emerge-webrsync~ and select a profile from ~eselect profile list~ using ~eselect profile set <number>~ (in this case, default/linux/amd64/23.0 (stable))
-- *Step 6:* Unless you want to use binpkgs for your stage4 (in which case, you can follow the Gentoo handbook on how to do it), remove the ~priority = 1~ line from /etc/portage/binrepos.conf/gentoobinhost.conf, as the install-backend will handle it manually depending on the user choice.
+
+- *Step 5:* We now execute ~emerge-webrsync~ and select a profile from ~eselect profile list~ using ~eselect profile set <number>~ (in this case, ~default/linux/amd64/23.0 (stable)~)
+
+- *Step 6:* Unless you want to use binpkgs for your stage4 (in which case, you can follow the Gentoo handbook on how to do it), remove the ~priority = 1~ line from ~/etc/portage/binrepos.conf/gentoobinhost.conf~, as the install-backend will handle it manually depending on the user choice.
+
 - *Step 7:* We add (temporarely) ~ACCEPT_LICENSE="*"~ ~MAKEOPTS="-jX -lY"~ to /etc/portage/make.conf , according to the Gentoo Handbook : For X :A good choice is the smaller of: the number of threads the CPU has, or the total amount of system RAM divided by 2 GiB. For Y : just X but slightly bigger, generally by 1
+
 - *Step 8:* We also add some custom use flags, i will use networkmanager as an example here ~USE="networkmanager"~, you can also play around with other variables such as L10N, VIDEO_CARDS and others, but we will stick with the basics for now.
+
 - *Step 9:* While we prefer an English stage4 by default, if something else is needed, check [[https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Base#Configure_locales][Installing the Gentoo base system - Gentoo wiki]]
+
 - *Step 10:* Now we do a world update, this way the user wont end up with outdated packages upon installing, even if they refuse to update : ~emerge -avuDN @world~
+
 - *Step 11:* We enable dracut and grub support for dist kernels by adding ~sys-kernel/installkernel dracut grub~ to ~/etc/portage/package.use/installkernel~
-- *Step 12:* This is where editions WILL differ, so we will start with mandatory packages to install, and give examples of optional ones ^-^, ~emerge -aq app-portage/cpuid2cpuflags app-portage/gentoolkit app-admin/sudo sys-block/io-scheduler-udev-rules sys-kernel/dracut sys-fs/genfstab sys-kernel/installkernel sys-boot/grub~ If for whatever reason you want to use GRUB with an "exotic" target firmware , refer to this page [[https://wiki.gentoo.org/wiki/GRUB][GRUB - Gentoo wiki]] but for the most part, the defaults are good.
+
+- *Step 12:* This is where editions WILL differ, so we will start with mandatory packages to install, and give examples of optional ones ^-^, ~emerge -aq app-portage/cpuid2cpuflags app-portage/gentoolkit app-admin/sudo sys-block/io-scheduler-udev-rules sys-kernel/dracut sys-fs/genfstab sys-kernel/installkernel sys-boot/grub~ If for whatever reason you want to use GRUB with an "exotic" target firmware , refer to this page [[https://wiki.gentoo.org/wiki/GRUB][GRUB - Gentoo wiki]] but for the most part, the
+  defaults are good.
+
 - *Step 13:ORC* Now for some optional packages that IMO should be added ^^ but without em, the installer will NOT break ~emerge -aq app-admin/sysklogd sys-process/cronie sys-apps/mlocate net-misc/chrony~ and we enable the services with ~rc-update add sysklogd default && rc-update add cronie default && rc-update add chronyd default~
+
 - *Step 13:SYSD* In the case of systemd, most of these features are built in, so we need to only enable ~systemctl enable systemd-timesyncd.service~
+
 - *Step 13:* For both systemd and openrc i suggest installing ~app-shells/bash-completion dev-vcs/git~ and anything else you deem fit, have fun here !!
+
 - *Step 14:* using ~visudo~ we configure sudo to allow people from the wheel group to execute commands WITH a password. Un-comment this line ~%wheel ALL=(ALL:ALL) ALL~.
+
 - *Step 15:* Copy [[./misc/os-release]] to ~/etc/os-release~ to get Magix branding and Logo in fetch programs.
-- *Step 16:* We remove temp files using ~eclean-pkg && eclean-dist~ and deleting /var/cache/distfiles /tmp /var/tmp /root/.bash-history and whatever you see fit
+
+- *Step 16:* We remove temp files using ~eclean-pkg && eclean-dist~ and deleting ~/var/cache/distfiles /tmp /var/tmp /root/.bash-history~ and whatever you see fit
+
 - *Step 17:* And now, we ~exit~ from the chroot, go back a step (or even better, go home ~cd \~~) and ~umount -R Builddir/~ *VERY IMPORTANT STUFF* overwise the stage4 will contain the content of all your hard drives. not the smartest thing to do IMO. and then do ~rm -rfv Builddir/dev/*~ *AFTER THE FIRST COMMAND. OTHERWISE DATA WILL BE LOST*
-- *Step 18:* Go back to the Builddir ~cd Builddir~ and do ~tar -c -v -I 'xz -9 -T0' -f path/where/you/want/to/save/the/stage4.tar.xz .~ as a general rule of thumb, your naming of the file should be stage4-%init%-%desktop%-%quirk%-%creator%-%DDMMYYYY%.tar.xz and by quirk I mean what will make it different from another stage4 of the same nature both this, and the creator are optional. *EX: ~stage4-openrc-xfce-freesoftware-bobelkassa-29082024.tar.xz~* if the stage4 doesn't include a desktop, use *nox11* or *nox* for short.
+
+- *Step 18:* Go back to the Builddir ~cd Builddir~ and do ~tar -c -v -I 'xz -9 -T0' -f path/where/you/want/to/save/the/stage4.tar.xz .~ as a general rule of thumb, your naming of the file should be ~stage4-%init%-%desktop%-%quirk%-%creator%-%DDMMYYYY%.tar.xz~ and by quirk I mean what will make it different from another stage4 of the same nature both this, and the creator are optional. *EX: ~stage4-openrc-xfce-freesoftware-bobelkassa-29082024.tar.xz~* if the stage4 doesn't include a desktop, use *nox11* or *nox* for short.
