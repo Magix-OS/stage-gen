@@ -1,0 +1,9 @@
+NAME=Magix
+ID=magix
+PRETTY_NAME="Magix Linux"
+ANSI_COLOR="33;213"
+HOME_URL="https://www.github.com/Magix-OS/"
+SUPPORT_URL="https://www.gentoo.org/support/"
+BUG_REPORT_URL="https://bugs.gentoo.org/"
+VERSION_ID="0.0.9 PTB"
+
