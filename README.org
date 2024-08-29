@@ -20,7 +20,7 @@ Here in Magix corp, we rarely judge you for your choice of software, and your in
 
 * NoX11
 
-NoX11 (or NoX) will refer to a stage4 without a DE or WM, just a tty and basic tools. This will logically be the smallest one, and fastest to make, as it will be similar to the base stage3. We will be using the non-desktop stage3 as a base because why not. Suffisant permissions are assumed here !
+NoX11 (or NoX) will refer to a stage4 without a DE or WM, just a tty and basic tools. This will logically be the smallest one, and fastest to make, as it will be similar to the base stage3. We will be using the non-desktop stage3 as a base because why not. Sufficient permissions are assumed here !
 
 - *Step 1:* Extract stage3 to Build directory using ~tar xpvf path/to/stage3.tar.xz --xattrs-include='*.*' --numeric-owner Builddir~
 - *Step 2:* *From now on, we will assume being inside the Builddir, unless otherwise mentioned:* ~cp --dereference /etc/resolv.conf etc/~
@@ -42,7 +42,7 @@ chroot . /bin/bash
 
 - *Step 6:* Unless you want to use binpkgs for your stage4 (in which case, you can follow the Gentoo handbook on how to do it), remove the ~priority = 1~ line from ~/etc/portage/binrepos.conf/gentoobinhost.conf~, as the install-backend will handle it manually depending on the user choice.
 
-- *Step 7:* We add (temporarely) ~ACCEPT_LICENSE="*"~ ~MAKEOPTS="-jX -lY"~ to /etc/portage/make.conf , according to the Gentoo Handbook : For X :A good choice is the smaller of: the number of threads the CPU has, or the total amount of system RAM divided by 2 GiB. For Y : just X but slightly bigger, generally by 1
+- *Step 7:* We add (temporarily) ~ACCEPT_LICENSE="*"~ ~MAKEOPTS="-jX -lY"~ to /etc/portage/make.conf , according to the Gentoo Handbook : For X :A good choice is the smaller of: the number of threads the CPU has, or the total amount of system RAM divided by 2 GiB. For Y : just X but slightly bigger, generally by 1
 
 - *Step 8:* We also add some custom use flags, i will use networkmanager as an example here ~USE="networkmanager"~, you can also play around with other variables such as L10N, VIDEO_CARDS and others, but we will stick with the basics for now.
 
@@ -55,9 +55,9 @@ chroot . /bin/bash
 - *Step 12:* This is where editions WILL differ, so we will start with mandatory packages to install, and give examples of optional ones ^-^, ~emerge -aq app-portage/cpuid2cpuflags app-portage/gentoolkit app-admin/sudo sys-block/io-scheduler-udev-rules sys-kernel/dracut sys-fs/genfstab sys-kernel/installkernel sys-boot/grub~ If for whatever reason you want to use GRUB with an "exotic" target firmware , refer to this page [[https://wiki.gentoo.org/wiki/GRUB][GRUB - Gentoo wiki]] but for the most part, the
   defaults are good.
 
-- *Step 13:ORC* Now for some optional packages that IMO should be added ^^ but without em, the installer will NOT break ~emerge -aq app-admin/sysklogd sys-process/cronie sys-apps/mlocate net-misc/chrony~ and we enable the services with ~rc-update add sysklogd default && rc-update add cronie default && rc-update add chronyd default~
+- *Step 13:OpenRC* Now for some optional packages that IMO should be added ^^ but without em, the installer will NOT break ~emerge -aq app-admin/sysklogd sys-process/cronie sys-apps/mlocate net-misc/chrony~ and we enable the services with ~rc-update add sysklogd default && rc-update add cronie default && rc-update add chronyd default~
 
-- *Step 13:SYSD* In the case of systemd, most of these features are built in, so we need to only enable ~systemctl enable systemd-timesyncd.service~
+- *Step 13:SystemD* In the case of systemd, most of these features are built in, so we need to only enable ~systemctl enable systemd-timesyncd.service~
 
 - *Step 13:* For both systemd and openrc i suggest installing ~app-shells/bash-completion dev-vcs/git~ and anything else you deem fit, have fun here !!
 
