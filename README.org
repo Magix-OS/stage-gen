@@ -70,3 +70,14 @@ chroot . /bin/bash
 - *Step 17:* And now, we ~exit~ from the chroot, go back a step (or even better, go home ~cd \~~) and ~umount -R Builddir/~ *VERY IMPORTANT STUFF* overwise the stage4 will contain the content of all your hard drives. not the smartest thing to do IMO. and then do ~rm -rfv Builddir/dev/*~ *AFTER THE FIRST COMMAND. OTHERWISE DATA WILL BE LOST*
 
 - *Step 18:* Go back to the Builddir ~cd Builddir~ and do ~tar -c -v -I 'xz -9 -T0' -f path/where/you/want/to/save/the/stage4.tar.xz .~ as a general rule of thumb, your naming of the file should be ~stage4-%init%-%desktop%-%quirk%-%creator%-%DDMMYYYY%.tar.xz~ and by quirk I mean what will make it different from another stage4 of the same nature both this, and the creator are optional. *EX: ~stage4-openrc-xfce-freesoftware-bobelkassa-29082024.tar.xz~* if the stage4 doesn't include a desktop, use *nox11* or *nox* for short.
+
+* Plasma :
+To have a KDE Plasma stage4, pick a different profile in *Step 5* and do the same steps as [[NoX11]] up until *Step 13* where you make these modifications:
+
+- *Step A:* Install the base Plasma desktop package ~kde-plasma/plasma-meta gui-libs/display-manager-init~ and running ~rc-update add display-manager default~ I also recommend installing at least a browser, dolphin, and konsole ~www-client/firefox:esr kde-apps/dolphin kde-apps/konsole~
+- *Step A.1:* Optionally, and if you have the patience and hardware, also install ~kde-apps/kde-apps-meta~ according to [[https://wiki.gentoo.org/wiki/KDE][KDE - Gentoo wiki]]. And other packages however you see fit!
+- *Step B:* Edit ~/etc/conf.d/display-manager~ and replace ~xdm~ with ~sddm~
+- *Step C:OpenRC* Enable udev ~rc-update add udev sysinit~ elogind ~rc-update add elogind boot~. As for *Systemd* you do not need to do anything of the sort.
+
+
+And the rest is done the exact same way!
